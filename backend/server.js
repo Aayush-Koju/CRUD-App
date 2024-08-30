@@ -22,6 +22,15 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/:id", (req, res) => {
+  const sql = "SELECT * FROM student WHERE ID = ?";
+  const id = req.params.id;
+  db.query(sql, [id], (err, data) => {
+    if (err) return res.json("Error");
+    return res.json(data);
+  });
+});
+
 app.post("/create", (req, res) => {
   const sql = "INSERT INTO student (`Name`, `Email`) VALUES (?, ?)";
   const values = [req.body.name, req.body.email];

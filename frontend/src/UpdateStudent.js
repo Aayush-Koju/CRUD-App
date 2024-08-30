@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function UpdateStudent() {
@@ -7,6 +7,19 @@ function UpdateStudent() {
   const [email, setEmail] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8081/" + id)
+      .then((res) => {
+        if (Array.isArray(res.data)) {
+          const student = res.data[0];
+          setName(student.Name);
+          setEmail(student.Email);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -30,6 +43,7 @@ function UpdateStudent() {
               type="text"
               placeholder="Enter Name"
               className="form-control"
+              value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -39,6 +53,7 @@ function UpdateStudent() {
               type="email"
               placeholder="Enter Email"
               className="form-control"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>

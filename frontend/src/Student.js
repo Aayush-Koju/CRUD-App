@@ -8,7 +8,13 @@ export default function Student() {
   useEffect(() => {
     axios
       .get("http://localhost:8081/")
-      .then((res) => setStudent(res.data))
+      .then((res) => {
+        if (Array.isArray(res.data)) {
+          setStudent(res.data);
+        } else {
+          setStudent([]);
+        }
+      })
       .catch((err) => console.log(err));
   }, []);
 
